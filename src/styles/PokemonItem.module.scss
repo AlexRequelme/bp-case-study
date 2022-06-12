@@ -1,0 +1,11 @@
+.flex-center {
+    text-align: center;
+    vertical-align: middle;
+}
+.pokemon-img {
+    display: block;
+    margin:0 auto;
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+}
