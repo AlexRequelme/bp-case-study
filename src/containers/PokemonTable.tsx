@@ -1,44 +1,43 @@
 import PokemonItem from "../components/PokemonItem";
 import styles from "../styles/PokemonTable.module.scss";
+import { Pokemon } from "../types/pokemon";
 
-function PokemonTable() {
+type PokemonTableProps = {
+    pokemons: Pokemon[];
+    handleEdit: any;
+    handleDelete: any;
+};
+
+function PokemonTable(props: PokemonTableProps) {
+    const columns = ["Nombre", "Imagen", "Ataque", "Defensa", "Acciones"];
+
     return (
         <div className={styles["container"]}>
             <table>
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Imagen</th>
-                        <th>Ataque</th>
-                        <th>Defensa</th>
-                        <th>Acciones</th>
+                        {columns.map((name) => (
+                            <th key={name}>{name}</th>
+                        ))}
                     </tr>
                 </thead>
                 <tbody>
-                    <PokemonItem
-                        name="Ivysaur"
-                        imgUrl=""
-                        attack={65}
-                        defense={38}
-                        onEdit={() => console.log("Edit....")}
-                        onDelete={() => console.log("Delete...")}
-                    />
-                    <PokemonItem
-                        name="Ivysaur"
-                        imgUrl=""
-                        attack={65}
-                        defense={38}
-                        onEdit={() => console.log("Edit....")}
-                        onDelete={() => console.log("Delete...")}
-                    />
-                    <PokemonItem
-                        name="Ivysaur"
-                        imgUrl=""
-                        attack={65}
-                        defense={38}
-                        onEdit={() => console.log("Edit....")}
-                        onDelete={() => console.log("Delete...")}
-                    />
+                    {props.pokemons.length > 0 ? (
+                        props.pokemons.map((pokemon, index) => (
+                            <PokemonItem
+                                key={`${pokemon.name}-${index}`}
+                                {...pokemon}
+                                onEdit={() => props.handleEdit(true, pokemon)}
+                                onDelete={props.handleDelete}
+                            />
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={columns.length}>
+                                No se encontraron pokemones registrados.
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </div>

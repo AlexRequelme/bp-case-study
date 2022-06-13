@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+    max-height: 70%;
+    overflow-y: auto;
 
     & > .header {
         border: 1px solid;
@@ -17,5 +19,11 @@
 
     & thead {
         color: #686464;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        overflow-x: auto;
     }
 }

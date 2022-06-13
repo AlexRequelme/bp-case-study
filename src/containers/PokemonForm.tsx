@@ -1,56 +1,104 @@
-import styles from "../styles/PokemonForm.module.scss";
-import { ReactComponent as SaveIcon } from "../assets/icons/save.svg";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { ReactComponent as DeleteIcon } from "../assets/icons/cross.svg";
+import { ReactComponent as SaveIcon } from "../assets/icons/save.svg";
+import styles from "../styles/PokemonForm.module.scss";
+import { Pokemon } from "../types/pokemon";
 
-function PokemonForm() {
+type PokemonFormProps = {
+    pokemon: Pokemon | null;
+    handleClose: any;
+    handleSave: any;
+};
+
+function PokemonForm({ pokemon, handleClose, handleSave }: PokemonFormProps) {
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { isValid },
+        reset,
+    } = useForm({ mode: "onChange" });
+    const attackValue = watch("attack");
+    const defenseValue = watch("defense");
+
+    useEffect(() => {
+        reset({
+            name: pokemon?.name || "",
+            image: pokemon?.image || "",
+            attack: pokemon?.attack || "50",
+            defense: pokemon?.defense || "50",
+        });
+    }, [pokemon, reset]);
+
+    const onSubmit = handleSubmit((data) => {
+        handleSave(Boolean(pokemon), data);
+    });
+
     return (
-        <div className={styles["container"]}>
-            <span className={styles["container-title"]}>Nuevo Pokemon</span>
+        <form
+            autoComplete="off"
+            onSubmit={onSubmit}
+            className={styles["container"]}
+        >
             <div className={styles["section-wrapper"]}>
                 <div className={styles["section-align"]}>
                     <label>
                         Nombre:
-                        <input />
+                        <input {...register("name", { required: true })} />
                     </label>
                     <label>
                         Imagen:
-                        <input />
+                        <input {...register("image", { required: true })} />
                     </label>
                 </div>
                 <div className={styles["section-align"]}>
-                    <label>
+                    <label className={styles["range-label"]}>
                         Ataque:
                         <input
+                            {...register("attack", { required: true })}
                             className="slider"
                             type="range"
-                            min="1"
+                            min="0"
                             max="100"
                             defaultValue="50"
                         />
+                        <span>{attackValue}</span>
                     </label>
-                    <label>
+                    <label className={styles["range-label"]}>
                         Defensa:
                         <input
+                            {...register("defense", { required: true })}
                             className="slider"
                             type="range"
-                            min="1"
+                            min="0"
                             max="100"
                             defaultValue="50"
                         />
+                        <span>{defenseValue}</span>
                     </label>
                 </div>
             </div>
             <div className={styles["button-container"]}>
-                <button type="submit" className="button-base button-primary">
+                <button
+                    onClick={handleSave}
+                    type="submit"
+                    className="button-base button-primary"
+                    disabled={!isValid}
+                >
                     <SaveIcon className="svg-size" />
                     Guardar
                 </button>
-                <button type="button" className="button-base button-secondary">
+                <button
+                    onClick={handleClose}
+                    type="button"
+                    className="button-base button-secondary"
+                >
                     <DeleteIcon className="svg-size" />
                     Cancelar
                 </button>
             </div>
-        </div>
+        </form>
     );
 }
 

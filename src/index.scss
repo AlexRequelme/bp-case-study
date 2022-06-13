@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap");
 
+// Colors
+$primary-color: #ffdd00;
+$primary-hover-color: #ffd100;
+$secondary-color: #e9ecf3;
+$border-color: #c7cfe1;
+
 html,
 body,
 #root {
@@ -10,7 +16,7 @@ body,
     line-height: 24px;
     margin: 0px;
     padding: 0px;
-    color: #4a4a50;    
+    color: #4a4a50;
 }
 
 h1,
@@ -19,13 +25,18 @@ h2 {
     font-weight: 700;
 }
 
+h3,
+p {
+    margin: 0;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
 }
 
 input {
-    border: 1px solid #c7cfe1;
+    border: 1px solid $border-color;
     height: 40px;
     padding: 0px 12px;
     border-radius: 4px;
@@ -34,6 +45,7 @@ input {
 .button-base {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     border-radius: 4px;
     font-size: 14px;
@@ -41,24 +53,28 @@ input {
     font-weight: 600;
     padding: 8px 25px;
     cursor: pointer;
-    color: #0f265c;
+    color: #0f265c;    
 }
 
 .button-primary {
-    background-color: #ffdd00;
+    background-color: $primary-color;
     border: none;
 
     &:hover {
-        background-color: #ffd100;
+        background-color: $primary-hover-color;
+    }
+
+    &:disabled {
+        opacity: 0.55;
     }
 }
 
 .button-secondary {
-    background-color: #e9ecf3;
+    background-color: $secondary-color;
     border: 1px solid #d4d8e1;
 
     &:hover {
-        background-color: #c7cfe1;
+        background-color: $border-color;
     }
 }
 
@@ -69,18 +85,19 @@ input {
 
 // slider for firefox
 input[type="range"] {
-    /* fix for FF unable to apply focus style bug  */
     border: 1px solid white;
+    //width: 300px;
+}
 
-    /*required for proper track sizing in FF*/
-    width: 300px;
+input[type="range"]::-moz-range-progress {
+    background-color: $primary-color;
+    height: 5px;
+    border-radius: 3px;
 }
 
 input[type="range"]::-moz-range-track {
-    width: 300px;
     height: 5px;
-    background: #ddd;
-    border: none;
+    background-color: #ddd;
     border-radius: 3px;
 }
 
@@ -89,17 +106,12 @@ input[type="range"]::-moz-range-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: #ffdd00;
+    background: $primary-color;
 }
 
-/*hide the outline behind the border*/
 input[type="range"]:-moz-focusring {
     outline: 1px solid white;
     outline-offset: -1px;
-}
-
-input[type="range"]:focus::-moz-range-track {
-    background: #ccc;
 }
 
 // slider for chromium
@@ -108,7 +120,7 @@ input[type="range"] {
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
-    width: 300px;
+    //width: 300px;
     height: 5px;
     background: #ddd;
     border: none;
@@ -121,14 +133,14 @@ input[type="range"]::-webkit-slider-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: #ffdd00;
-    margin-top: -4px;
+    background: $primary-color;
+    margin-top: -6px;
 }
+
+/* input[type="range"]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+} */
 
 input[type="range"]:focus {
     outline: none;
-}
-
-input[type="range"]:focus::-webkit-slider-runnable-track {
-    background: #ccc;
 }

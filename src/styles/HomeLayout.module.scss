@@ -1,23 +1,31 @@
 .container {
     width: 60%;
+    flex: 1;
     height: 100%;
     margin-left: auto;
     margin-right: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 24px;
 }
 
 .head-section {
+    width: 100%;
+    padding-top: 24px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+}
 
-    & > label {
-        font-size: 16px;
-        display: flex;
+@media (max-width: 1024px) {
+    .container {
+        width: 90%;
+        gap: 16px;
+    }
+    .head-section {
         flex-direction: column;
-        gap: 8px;
+        gap: 16px;
+        align-items: unset;
     }
 }
