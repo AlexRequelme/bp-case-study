@@ -19,7 +19,7 @@ function PokemonTable({
 
     return (
         <div className={styles["container"]}>
-            <table>
+            <table data-testid="table">
                 <thead>
                     <tr>
                         {columns.map((name) => (
@@ -27,7 +27,7 @@ function PokemonTable({
                         ))}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody data-testid="table-body">
                     {pokemons.length > 0 ? (
                         pokemons.map((pokemon, index) => (
                             <PokemonItem
@@ -48,7 +48,7 @@ function PokemonTable({
                             />
                         ))
                     ) : (
-                        <tr>
+                        <tr data-testid="not-pokemons">
                             <td colSpan={columns.length}>
                                 No se encontraron pokemones registrados.
                             </td>

@@ -13,7 +13,7 @@ function Modal(props: ModalProps) {
     }`;
 
     return (
-        <div className={parentStyle}>
+        <div data-testid="modal-parent" className={parentStyle}>
             <div className={styles["modal"]}>
                 <div className={styles["modal-header"]}>
                     <h3>{props.title}</h3>

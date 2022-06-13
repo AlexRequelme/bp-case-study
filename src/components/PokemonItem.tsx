@@ -15,9 +15,10 @@ type PokemonItemProps = {
 function PokemonItem(props: PokemonItemProps) {
     return (
         <tr className={props.className}>
-            <td>{props.name}</td>
+            <td data-testid="pokemon-name">{props.name}</td>
             <td className={styles["flex-center"]}>
                 <img
+                    data-testid="pokemon-img"
                     className={styles["pokemon-img"]}
                     src={
                         props.image ||

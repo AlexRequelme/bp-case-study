@@ -27,7 +27,11 @@ function SearchForm({ handleSearch, handleReset }: SearchFormProps) {
                 Listado de Pokemon
             </label>
             <div className={styles["search-wrapper"]}>
-                <button type="submit" className={`${styles["icon"]}`}>
+                <button
+                    data-testid="search-icon"
+                    type="submit"
+                    className={`${styles["icon"]}`}
+                >
                     <SearchIcon className="svg-size" />
                 </button>
                 <input
@@ -37,6 +41,7 @@ function SearchForm({ handleSearch, handleReset }: SearchFormProps) {
                 />
                 {watchValue && (
                     <button
+                        data-testid="reset-icon"
                         onClick={onReset}
                         type="button"
                         className={`${styles["cross"]}`}
