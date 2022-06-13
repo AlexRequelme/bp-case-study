@@ -32,7 +32,7 @@ function PokemonForm({ pokemon, handleClose, handleSave }: PokemonFormProps) {
     }, [pokemon, reset]);
 
     const onSubmit = handleSubmit((data) => {
-        handleSave(Boolean(pokemon), data);
+        handleSave(Boolean(pokemon), { id: pokemon?.id, ...data });
     });
 
     return (
@@ -81,13 +81,12 @@ function PokemonForm({ pokemon, handleClose, handleSave }: PokemonFormProps) {
             </div>
             <div className={styles["button-container"]}>
                 <button
-                    onClick={handleSave}
                     type="submit"
                     className="button-base button-primary"
                     disabled={!isValid}
                 >
                     <SaveIcon className="svg-size" />
-                    Guardar
+                    {Boolean(pokemon) ? "Actualizar" : "Guardar"}
                 </button>
                 <button
                     onClick={handleClose}
