@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    max-height: 70%;
+    overflow-y: auto;
+
+    & > .header {
+        border: 1px solid;
+    }
+
+    & > table,
+    th,
+    td {
+        border: 1px solid #c7cfe1;
+        border-collapse: collapse;
+        padding: 8px 16px;
+    }
+
+    & thead {
+        color: #686464;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        overflow-x: auto;
+    }
+}
