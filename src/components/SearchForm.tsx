@@ -1,15 +1,51 @@
+import { useForm } from "react-hook-form";
+import { ReactComponent as CrossIcon } from "../assets/icons/cross.svg";
 import { ReactComponent as SearchIcon } from "../assets/icons/search.svg";
 import styles from "../styles/SearchForm.module.scss";
 
-function SearchForm() {
+type SearchFormProps = {
+    handleSearch: any;
+    handleReset: any;
+};
+
+function SearchForm({ handleSearch, handleReset }: SearchFormProps) {
+    const { register, handleSubmit, watch, setValue } = useForm();
+    const watchValue = watch("search");
+
+    const onSubmit = handleSubmit((data) => {
+        handleSearch(data);
+    });
+
+    const onReset = () => {
+        setValue("search", "");
+        handleReset();
+    };
+
     return (
-        <label className={styles["container"]}>
-            Listado de Pokemon
+        <form onSubmit={onSubmit}>
+            <label htmlFor="search" className={styles["container"]}>
+                Listado de Pokemon
+            </label>
             <div className={styles["search-wrapper"]}>
-                <SearchIcon className={`svg-size ${styles["icon"]}`} />
-                <input placeholder="Buscar" />
+                <button type="submit" className={`${styles["icon"]}`}>
+                    <SearchIcon className="svg-size" />
+                </button>
+                <input
+                    type="search"
+                    placeholder="Buscar"
+                    {...register("search", { required: true })}
+                />
+                {watchValue && (
+                    <button
+                        onClick={onReset}
+                        type="button"
+                        className={`${styles["cross"]}`}
+                    >
+                        <CrossIcon className="svg-size" />
+                    </button>
+                )}
             </div>
-        </label>
+        </form>
     );
 }
 

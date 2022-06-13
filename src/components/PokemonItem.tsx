@@ -9,20 +9,26 @@ type PokemonItemProps = {
     defense: number;
     onEdit: any;
     onDelete: any;
+    className?: string;
 };
 
 function PokemonItem(props: PokemonItemProps) {
     return (
-        <tr>
+        <tr className={props.className}>
             <td>{props.name}</td>
             <td className={styles["flex-center"]}>
                 <img
                     className={styles["pokemon-img"]}
                     src={
                         props.image ||
-                        "http://atrilco.com/wp-content/uploads/2017/11/ef3-placeholder-image.jpg"
+                        "https://atrilco.com/wp-content/uploads/2017/11/ef3-placeholder-image.jpg"
                     }
                     alt={`pokemon-${props.name}`}
+                    onError={(e: any) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                            "https://atrilco.com/wp-content/uploads/2017/11/ef3-placeholder-image.jpg";
+                    }}
                 />
             </td>
             <td>{props.attack}</td>

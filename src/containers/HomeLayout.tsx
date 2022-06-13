@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import API from "../api";
 import { ReactComponent as AddIcon } from "../assets/icons/plus.svg";
 import ConfirmationMsg from "../components/ConfirmationMsg";
+import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import SearchForm from "../components/SearchForm";
 import styles from "../styles/HomeLayout.module.scss";
@@ -9,66 +11,115 @@ import PokemonForm from "./PokemonForm";
 import PokemonTable from "./PokemonTable";
 
 type FormModalType = {
-    show: boolean;
+    show: string;
     pokemon: Pokemon | null;
 };
 
-const pokemones: Pokemon[] = [
-    { name: "Ivysaur", image: "", attack: 65, defense: 38 },
-    { name: "Pikachu", image: "", attack: 100, defense: 38 },
-    { name: "Bulbasur", image: "", attack: 20, defense: 50 },
-    { name: "Ivysaur", image: "", attack: 55, defense: 15 },
-];
-
 function HomeLayout() {
-    const [showModal, setShowModal] = useState(false);
+    const [pokemons, setPokemons] = useState<Pokemon[]>();
+    const [filters, setFilters] = useState<any>(null);
     const [showFormModal, setShowFormModal] = useState<FormModalType>({
-        show: false,
+        show: "",
         pokemon: null,
     });
 
-    const handleModalForm = (show: boolean, pokemon = null) => {
+    useEffect(() => {
+        const getAllPokemons = async () => {
+            const response = await API.get("?idAuthor=1");
+            if (response && response.data) setPokemons(response.data);
+        };
+
+        getAllPokemons();
+    }, []);
+
+    const handleModalForm = (show = "", pokemon = null) => {
         setShowFormModal({ show, pokemon });
     };
 
-    const savePokemon = (isUpdateMode: boolean, data: Pokemon) => {
-        console.log(data);
-        if (isUpdateMode) {
-            console.log("Actualizando");
-        } else {
-            console.log("Creando");
+    const deletePokemon = async () => {
+        const pokemonToDelete = showFormModal.pokemon;
+        if (pokemonToDelete) {
+            const response = await API.delete(`${pokemonToDelete.id}`);
+            if (response.data) {
+                handleModalForm();
+                setPokemons(
+                    pokemons?.filter((pkm) => pkm.id !== pokemonToDelete.id)
+                );
+            }
         }
-        handleModalForm(false);
+    };
+
+    const savePokemon = async (
+        isUpdateMode: boolean,
+        targetPokemon: Pokemon
+    ) => {
+        if (isUpdateMode) {
+            const response = await API.put(
+                `${targetPokemon.id}`,
+                targetPokemon
+            );
+            if (response.data) {
+                const index = pokemons!.findIndex(
+                    (pkm) => pkm.id === targetPokemon.id
+                );
+
+                if (index !== -1) {
+                    const auxArray = Array.from(pokemons!);
+                    auxArray[index] = response.data;
+                    setPokemons(auxArray);
+                }
+            }
+        } else {
+            const response = await API.post("?idAuthor=1", {
+                ...targetPokemon,
+                idAuthor: 1,
+                hp: 100,
+                type: "normal",
+            });
+
+            if (response.data) {
+                setPokemons((prev: any) => [...prev, response.data]);
+            }
+        }
+        handleModalForm();
     };
 
     return (
         <>
             <div className={styles["container"]}>
                 <div className={styles["head-section"]}>
-                    <SearchForm />
+                    <SearchForm
+                        handleSearch={setFilters}
+                        handleReset={() => setFilters(null)}
+                    />
                     <button
                         type="button"
-                        onClick={() => handleModalForm(true)}
+                        onClick={() => handleModalForm("form")}
                         className="button-base button-primary"
                     >
                         <AddIcon className="svg-size" />
                         Nuevo
                     </button>
                 </div>
-                <PokemonTable
-                    pokemons={pokemones}
-                    handleEdit={handleModalForm}
-                    handleDelete={() => setShowModal(true)}
-                />
+                {pokemons ? (
+                    <PokemonTable
+                        pokemons={pokemons}
+                        handleEdit={handleModalForm}
+                        handleDelete={handleModalForm}
+                        filters={filters}
+                    />
+                ) : (
+                    <Loader />
+                )}
             </div>
             <Modal
                 title="Eliminar Pokemon"
-                show={showModal}
-                handleClose={() => setShowModal(false)}
+                show={showFormModal["show"] === "confirm"}
+                handleClose={() => handleModalForm()}
                 children={
                     <ConfirmationMsg
-                        handleCancel={() => setShowModal(false)}
-                        handleConfirm={() => setShowModal(false)}
+                        handleCancel={() => handleModalForm()}
+                        handleConfirm={deletePokemon}
                         msg="Esta acción es irreversible. ¿Esta seguro que desea continuar?"
                     />
                 }
@@ -79,12 +130,12 @@ function HomeLayout() {
                         ? "Actualizar Pokemon"
                         : "Nuevo Pokemon"
                 }
-                show={showFormModal["show"]}
-                handleClose={() => handleModalForm(false)}
+                show={showFormModal["show"] === "form"}
+                handleClose={() => handleModalForm()}
                 children={
                     <PokemonForm
                         pokemon={showFormModal["pokemon"]}
-                        handleClose={() => handleModalForm(false)}
+                        handleClose={() => handleModalForm()}
                         handleSave={savePokemon}
                     />
                 }
