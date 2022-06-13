@@ -1,0 +1,26 @@
+.flex-center {
+    text-align: center;
+    vertical-align: middle;
+}
+.pokemon-img {
+    display: block;
+    margin: 0 auto;
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+}
+
+.icon-button {
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    padding: 0px;
+    color: #0f265c;
+}

@@ -1,0 +1,20 @@
+.container {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column-reverse;
+        align-items: initial;
+    }
+
+    .mobile-width {
+        max-width: 288px;
+        text-align: justify;
+    }
+}
